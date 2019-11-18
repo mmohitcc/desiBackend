@@ -24,6 +24,8 @@ def scrape():
 			links.append(link)
 			print (link)
 
+	if(len(links) == 0):
+		return 'Latest Episode not available yet'
 	link = links[-1]
 	eyeD = link[link.find("=")+1: len(link)]
 	print (eyeD)
