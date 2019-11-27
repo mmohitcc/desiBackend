@@ -1,9 +1,22 @@
 # app.py
 from flask import Flask, request, jsonify
 from scrape import scrape
+import requests
 app = Flask(__name__)
 
-@app.route('/getmsg/', methods=['GET'])
+def run_query(query): 
+      try:
+            request = requests.post('https://seniorprojectu.herokuapp.com/graphql', json={'query': query}, headers=None)
+            if request.status_code == 200:
+                  return request.json()
+            else:
+                  print("!Weights Capture failed to run by returning code of {}. {}".format(request.status_code, query))
+      except: 
+            print("!Weights Capture failed to run by returning code of {}. {}".format(request.status_code, query))
+
+
+
+@app.route('/getshow/', methods=['GET'])
 def respond():
     # Retrieve the name from url parameter
     name = request.args.get("name", None)
@@ -45,7 +58,8 @@ def post_something():
 # A welcome message to test our server
 @app.route('/')
 def index():
-    return jsonify({"latestEppisode: ": scrape()})
+    query = 'query{pricesUniverse { ticker openPrice closePrice}}'
+    return jsonify({"latestEppisode: ": run_query(query)})
 
 if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support
