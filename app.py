@@ -1,6 +1,7 @@
 # app.py
 from flask import Flask, request, jsonify
 from scrape import scrape
+from scrape import scrapeSecond
 app = Flask(__name__)
 
 @app.route('/getmsg/', methods=['GET'])
@@ -46,6 +47,10 @@ def post_something():
 @app.route('/')
 def index():
     return jsonify({"latestEppisode: ": scrape()})
+
+@app.route('/bhabiji')
+def bhabiji():
+    return jsonify({"latestEppisode: ": scrapeSecond()})
 
 if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support
