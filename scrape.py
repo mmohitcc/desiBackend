@@ -8,7 +8,7 @@ chrome_options.add_argument("--headless")
 chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--no-sandbox")
 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-# driver = webdriver.Chrome()
+#driver = webdriver.Chrome()
 
 
 
@@ -26,7 +26,7 @@ def scrape():
 
 	if(len(links) == 0):
 		return 'Latest Episode not available yet'
-	link = links[-1]
+	link = links[-2]
 	eyeD = link[link.find("=")+1: len(link)]
 	print (eyeD)
 	# paragraphs = driver.find_elements_by_tag_name('p')
