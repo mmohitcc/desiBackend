@@ -26,14 +26,18 @@ def scrape():
 
 	if(len(links) == 0):
 		return 'Latest Episode not available yet'
-	link = links[-2]
+	link = links[-1]
 	eyeD = link[link.find("=")+1: len(link)]
 	print (eyeD)
 	# paragraphs = driver.find_elements_by_tag_name('p')
 	# for p in paragraphs:
 	# 	print (p.find_element_by_xpath('.//b').element.get_attribute("text"))
+	frames = []
+	for lin in links:
+		currentId = eyeD = lin[lin.find("=")+1: len(lin)]
+		frames.append('<iframe src="http://vkprime.com/embed-%s.html" frameborder="0" allowfullscreen="" marginwidth="0" marginheight="0" scrolling="NO" width="520" height="400"></iframe>'%(currentId))
 
-	return ('<iframe src="http://vkprime.com/embed-%s.html" frameborder="0" allowfullscreen="" marginwidth="0" marginheight="0" scrolling="NO" width="520" height="400"></iframe>'%(eyeD))
+	return (frames)
 
 def scrapeSecond(): 
 	driver.get("https://www.desitellybox.me/category/and-tv/bhabhiji-ghar-par-hain/")
