@@ -13,8 +13,8 @@ driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), c
 
 
 
-def scrape():
-	driver.get("http://www.yodesitv.info/dance-plus-5-25th-january-2020-watch-online/")
+def scrape(link):
+	driver.get(link)
 	# time.sleep(5)
 	headlines = driver.find_elements_by_xpath("//*[contains(text(), 'VKprime')]")[0]
 	button = headlines.find_element_by_xpath("..")

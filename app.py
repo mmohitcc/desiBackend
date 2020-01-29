@@ -58,6 +58,10 @@ def index():
 def listShows():
     return jsonify(getListOfShows())
 
+@app.route('/watchShow')
+def watchShow():
+    return jsonify(scrape(request.args.get('showLink')))
+
 @app.route('/showDates')
 def showDates():
     link = request.args.get("showLink")
