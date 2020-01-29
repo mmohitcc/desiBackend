@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import os
 import time
+import json
 chrome_options = webdriver.ChromeOptions()
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 chrome_options.add_argument("--headless")
@@ -13,29 +14,35 @@ driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), c
 
 
 def scrape():
-	driver.get("http://www.desitellybox.me/category/colors/bigg-boss-13/")
-	headlines = driver.find_elements_by_xpath("//*[contains(text(), 'Episode Watch Online')]")[0].click()
-	time.sleep(5)
-	headlines = driver.find_elements_by_xpath("//a[contains(text(), 'Bigg Boss') and contains(text(), '13')]")
-	links = []
-	for headline in headlines:
-		link = (headline.get_attribute("href"))
-		if (link.lower().find("vk") > 0 ):
-			links.append(link)
-			print (link)
+	driver.get("http://www.yodesitv.info/dance-plus-5-25th-january-2020-watch-online/")
+	# time.sleep(5)
+	headlines = driver.find_elements_by_xpath("//*[contains(text(), 'VKprime')]")[0]
+	button = headlines.find_element_by_xpath("..")
+	pary = button.find_element_by_xpath("following-sibling::p")
+	allvkPrimeLinks = pary.find_elements_by_tag_name("a")
+	allLinks = []
+	for l in allvkPrimeLinks:
+		allLinks.append(l.get_attribute("href"))
+	sources = []
+	for l in allLinks:
+		print (l)
+		driver.get(l)
+		# frame = driver.find_element_by_xpath("//iframe[contains(@src,'vkprime'])]")
+		ifras = driver.find_elements_by_tag_name("iframe")
+		print("found frames \n")
+		for ifra in ifras:
+			print("checking frames")
+			if(ifra.get_attribute("src").find("vk") > 0):
+				sources.append(ifra.get_attribute("src"))
+				
 
-	if(len(links) == 0):
-		return 'Latest Episode not available yet'
-	link = links[-1]
-	eyeD = link[link.find("=")+1: len(link)]
-	print (eyeD)
-	# paragraphs = driver.find_elements_by_tag_name('p')
-	# for p in paragraphs:
-	# 	print (p.find_element_by_xpath('.//b').element.get_attribute("text"))
+
+	for source in sources:
+		print(source)
+	
 	frames = []
-	for lin in links:
-		currentId = eyeD = lin[lin.find("=")+1: len(lin)]
-		frames.append('<iframe src="http://vkprime.com/embed-%s.html" frameborder="0" allowfullscreen="" marginwidth="0" marginheight="0" scrolling="NO" width="520" height="400"></iframe>'%(currentId))
+	for source in sources:
+		frames.append('<iframe src="%s" frameborder="0" allowfullscreen="" marginwidth="0" marginheight="0" scrolling="NO" width="520" height="400"></iframe>'%(source))
 
 	return (frames)
 
@@ -100,3 +107,57 @@ def scrapeFourth():
 	link = links[-1]
 	eyeD = link[link.find("=")+1: len(link)]
 	return (['<iframe src="http://vkprime.com/embed-%s.html" frameborder="0" allowfullscreen="" marginwidth="0" marginheight="0" scrolling="NO" width="520" height="400"></iframe>'%(eyeD)])
+
+def getListOfShows():
+	showLinks = [
+	"http://www.yodesitv.info/star-plus/",
+	"http://www.yodesitv.info/colors/",
+	"http://www.yodesitv.info/zee-tv/",
+	"http://www.yodesitv.info/sony-tv/",
+	"http://www.yodesitv.info/tv-and-tv/",
+	"http://www.yodesitv.info/mtv-india/",
+	"http://www.yodesitv.info/sab-tv/",
+	"http://www.yodesitv.info/star-bharat/",
+	"http://www.yodesitv.info/star-jalsha/",
+	"http://www.yodesitv.info/star-pravah/",
+	"http://www.yodesitv.info/star-vijay/",
+	"http://www.yodesitv.info/bindass-tv/"]
+
+	allShows = {"allShows": []}
+
+	for show in showLinks:
+		# allShows.append(show)
+		driver.get(show)
+		showCards = driver.find_elements_by_class_name("one_fourth  ")
+		driver.find_element_by_xpath("//*[contains(text(), 'Archived')]").click()
+		for card in showCards:
+			show = {"name": "",
+				"link": "",
+				"imageLink": ""
+				}
+			show["name"] = (card.find_element_by_tag_name("p").find_element_by_tag_name("a").text)
+			show["link"] = (card.find_element_by_tag_name("p").find_element_by_tag_name("a").get_attribute("href"))
+			show["imageLink"] = (card.find_element_by_tag_name("a").find_element_by_tag_name("img").get_attribute("src"))
+			allShows["allShows"].append(show)
+		print(len(showCards))
+
+	return allShows
+
+def getDates(link):
+	driver.get(link)
+	headlines = driver.find_elements_by_class_name("latestPost-content")
+	eppisodes = {"eppisodes": []}
+	for headline in headlines:
+		title = headline.find_element_by_tag_name("a").get_attribute("title")
+		link = headline.find_element_by_tag_name("a").get_attribute("href")
+		eppisode = {"title": title, "link": link}
+		eppisodes["eppisodes"].append(eppisode)
+		print(title)
+
+	return eppisodes
+
+
+
+
+
+

@@ -4,6 +4,8 @@ from scrape import scrape
 from scrape import scrapeSecond
 from scrape import scrapeThird
 from scrape import scrapeFourth
+from scrape import getListOfShows
+from scrape import getDates
 app = Flask(__name__)
 
 @app.route('/getmsg/', methods=['GET'])
@@ -48,7 +50,19 @@ def post_something():
 # A welcome message to test our server
 @app.route('/')
 def index():
+    print("hey man")
+    print(request.args.get('showName'))
     return jsonify({"latestEppisode: ": scrape()})
+
+@app.route('/listShows')
+def listShows():
+    return jsonify(getListOfShows())
+
+@app.route('/showDates')
+def showDates():
+    link = request.args.get("showLink")
+    print(link)
+    return jsonify(getDates(request.args.get('showLink')))
 
 @app.route('/bhabiji')
 def bhabiji():
