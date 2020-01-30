@@ -25,17 +25,17 @@ def scrape(link):
 		allLinks.append(l.get_attribute("href"))
 	sources = []
 	for l in allLinks:
-		driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 		print (l)
 		driver.get(l)
 		# frame = driver.find_element_by_xpath("//iframe[contains(@src,'vkprime'])]")
 		ifras = driver.find_elements_by_tag_name("iframe")
+		del driver
 		print("found frames \n")
 		for ifra in ifras:
 			print("checking frames")
 			if(ifra.get_attribute("src").find("vk") > 0):
 				sources.append(ifra.get_attribute("src"))
-				
+		del ifras
 
 
 	for source in sources:
