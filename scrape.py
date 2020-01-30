@@ -110,18 +110,19 @@ def scrapeFourth():
 
 def getListOfShows():
 	showLinks = [
-	"http://www.yodesitv.info/star-plus/",
-	"http://www.yodesitv.info/colors/",
-	"http://www.yodesitv.info/zee-tv/",
-	"http://www.yodesitv.info/sony-tv/",
-	"http://www.yodesitv.info/tv-and-tv/",
-	"http://www.yodesitv.info/mtv-india/",
-	"http://www.yodesitv.info/sab-tv/",
-	"http://www.yodesitv.info/star-bharat/",
-	"http://www.yodesitv.info/star-jalsha/",
-	"http://www.yodesitv.info/star-pravah/",
-	"http://www.yodesitv.info/star-vijay/",
-	"http://www.yodesitv.info/bindass-tv/"]
+	#"http://www.yodesitv.info/star-plus/",
+	#"http://www.yodesitv.info/colors/",
+	#"http://www.yodesitv.info/zee-tv/",
+	#"http://www.yodesitv.info/sony-tv/",
+	#"http://www.yodesitv.info/tv-and-tv/",
+	#"http://www.yodesitv.info/mtv-india/",
+	#"http://www.yodesitv.info/sab-tv/",
+	#"http://www.yodesitv.info/star-bharat/",
+	#"http://www.yodesitv.info/star-jalsha/",
+	#"http://www.yodesitv.info/star-pravah/",
+	#"http://www.yodesitv.info/star-vijay/",
+	"http://www.yodesitv.info/bindass-tv/"
+	]
 
 	allShows = {"allShows": []}
 
@@ -129,16 +130,19 @@ def getListOfShows():
 		# allShows.append(show)
 		driver.get(show)
 		showCards = driver.find_elements_by_class_name("one_fourth  ")
-		driver.find_element_by_xpath("//*[contains(text(), 'Archived')]").click()
+		#driver.find_element_by_xpath("//*[contains(text(), 'Archived')]").click()
 		for card in showCards:
 			show = {"name": "",
 				"link": "",
 				"imageLink": ""
 				}
-			show["name"] = (card.find_element_by_tag_name("p").find_element_by_tag_name("a").text)
+
+			name = (card.find_element_by_tag_name("p").find_element_by_tag_name("a").text)
+			show["name"] = name
 			show["link"] = (card.find_element_by_tag_name("p").find_element_by_tag_name("a").get_attribute("href"))
 			show["imageLink"] = (card.find_element_by_tag_name("a").find_element_by_tag_name("img").get_attribute("src"))
-			allShows["allShows"].append(show)
+			if((len(name) != 0)):
+				allShows["allShows"].append(show)
 		print(len(showCards))
 
 	return allShows
