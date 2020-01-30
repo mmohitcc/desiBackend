@@ -50,7 +50,7 @@ def post_something():
 # A welcome message to test our server
 @app.route('/')
 def index():
-    #return jsonify({"latestEppisode: ": scrape()})
+    return jsonify({"ok": "200"})
 
 @app.route('/listShows')
 def listShows():
