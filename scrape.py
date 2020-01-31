@@ -21,6 +21,9 @@ def scrape(link):
 	pary = button.find_element_by_xpath("following-sibling::p")
 	allvkPrimeLinks = pary.find_elements_by_tag_name("a")
 	allLinks = []
+	del headlines
+	del button
+	del pary
 	for l in allvkPrimeLinks:
 		allLinks.append(l.get_attribute("href"))
 	sources = []
