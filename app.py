@@ -62,7 +62,7 @@ def watchShow():
     return jsonify(scrape(request.args.get('showLink')))
 
 @app.route('/watchShowDm')
-def watchShowDm();
+def watchShowDm()
     return jsonify(scrapeDailyMotion(request.args.get('showLink')))
 
 @app.route('/showDates')
