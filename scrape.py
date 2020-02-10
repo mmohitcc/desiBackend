@@ -31,12 +31,15 @@ def scrape(link):
 	sources = []
 	for l in allLinks:
 		# print (l)
+		# going to the video page
 		driver.get(l)
 		# frame = driver.find_element_by_xpath("//iframe[contains(@src,'vkprime'])]")
+		# grabbing the iframes on the page
 		ifras = driver.find_elements_by_tag_name("iframe")
 		# print("found frames \n")
 		for ifra in ifras:
 			# print("checking frames")
+			# looking for iframes with src containing vk
 			if(ifra.get_attribute("src").find("vk") > 0):
 				sources.append(ifra.get_attribute("src"))
 				
@@ -50,6 +53,49 @@ def scrape(link):
 		frames.append('<iframe src="%s" frameborder="0" allowfullscreen="" marginwidth="0" marginheight="0" scrolling="NO" width="520" height="400"></iframe>'%(source))
 	driver.quit()
 	return (frames)
+
+
+def scrapeDailyMotion(link):
+		driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+	# driver.execute_script("window.open('"+link+"', '_blank')")
+	driver.get(link)
+	# time.sleep(5)
+	headlines = driver.find_elements_by_xpath("//*[contains(text(), 'Dailymotion')]")[0]
+	button = headlines.find_element_by_xpath("..")
+	pary = button.find_element_by_xpath("following-sibling::p")
+	allvkPrimeLinks = pary.find_elements_by_tag_name("a")
+	allLinks = []
+	del headlines
+	del button
+	del pary
+	for l in allvkPrimeLinks:
+		allLinks.append(l.get_attribute("href"))
+	sources = []
+	for l in allLinks:
+		# print (l)
+		# going to the video page
+		driver.get(l)
+		# frame = driver.find_element_by_xpath("//iframe[contains(@src,'vkprime'])]")
+		# grabbing the iframes on the page
+		ifras = driver.find_elements_by_tag_name("iframe")
+		# print("found frames \n")
+		for ifra in ifras:
+			# print("checking frames")
+			# looking for iframes with src containing vk
+			if(ifra.get_attribute("src").find("plyr6") > 0):
+				sources.append(ifra.get_attribute("src"))
+				
+
+
+	# for source in sources:
+	# 	# print(source)
+	
+	frames = []
+	for source in sources:
+		frames.append('<iframe src="%s" frameborder="0" allowfullscreen="" marginwidth="0" marginheight="0" scrolling="NO" width="520" height="400"></iframe>'%(source))
+	driver.quit()
+	return (frames)
+
 
 def scrapeSecond():
 	driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)

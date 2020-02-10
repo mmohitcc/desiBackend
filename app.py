@@ -6,6 +6,7 @@ from scrape import scrapeThird
 from scrape import scrapeFourth
 from scrape import getListOfShows
 from scrape import getDates
+from scrape import scrapeDailyMotion
 app = Flask(__name__)
 
 @app.route('/getmsg/', methods=['GET'])
@@ -59,6 +60,10 @@ def listShows():
 @app.route('/watchShow')
 def watchShow():
     return jsonify(scrape(request.args.get('showLink')))
+
+@app.route('/watchShowDm')
+def watchShowDm();
+    return jsonify(scrapeDailyMotion(request.args.get('showLink')))
 
 @app.route('/showDates')
 def showDates():
