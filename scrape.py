@@ -83,6 +83,7 @@ def scrapeDailyMotion(link):
 	sources = []
 	count = 0
 	driver.quit()
+	allLinks = list(set(allLinks))
 	for l in allLinks:
 		# if(count % 2 == 0):
 		driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
