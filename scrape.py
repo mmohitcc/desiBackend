@@ -54,26 +54,42 @@ def scrape(link):
 	driver.quit()
 	return (frames)
 
-
 def scrapeDailyMotion(link):
 	driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 	# driver.execute_script("window.open('"+link+"', '_blank')")
 	driver.get(link)
 	# time.sleep(5)
-	headlines = driver.find_elements_by_xpath("//*[contains(text(), 'Dailymotion')]")[0]
-	button = headlines.find_element_by_xpath("..")
-	pary = button.find_element_by_xpath("following-sibling::p")
-	allvkPrimeLinks = pary.find_elements_by_tag_name("a")
+	allvkPrimeLinks = []
+	btns = driver.find_elements_by_class_name("btn_green")
+	for b in btns:
+		a = b.find_elements_by_xpath("//*[contains(text(), 'Dailymotion')]")
+		if(len(a) > 0):
+			# print("should have the one with daily motion")
+			button = a[0].find_element_by_xpath("..")
+			# print (button.get_attribute('innerHTML'))
+			pary = button.find_element_by_xpath("following-sibling::p")
+			allvkPrimeLinks = pary.find_elements_by_tag_name("a")
+	# headlines = btns.find_elements_by_xpath("//*[contains(text(), 'Dailymotion')]")[0]
+	
+	
+	
 	allLinks = []
-	del headlines
-	del button
-	del pary
+	# del headlines
+	# del button
+	# del pary
 	for l in allvkPrimeLinks:
 		allLinks.append(l.get_attribute("href"))
+		print(allLinks.append(l.get_attribute("href")))
 	sources = []
+	count = 0
+	driver.quit()
 	for l in allLinks:
+		# if(count % 2 == 0):
+		driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 		# print (l)
 		# going to the video page
+		# print("printing l")
+		# print(l)
 		driver.get(l)
 		# frame = driver.find_element_by_xpath("//iframe[contains(@src,'vkprime'])]")
 		# grabbing the iframes on the page
@@ -82,8 +98,13 @@ def scrapeDailyMotion(link):
 		for ifra in ifras:
 			# print("checking frames")
 			# looking for iframes with src containing vk
-			if(ifra.get_attribute("src").find("plyr6") > 0):
+			# print(ifra.get_attribute("src"))
+			if(ifra.get_attribute("src").find("plyr") > 0):
 				sources.append(ifra.get_attribute("src"))
+
+		# if(count % 2 == 0):
+		driver.quit()
+		count+=1
 				
 
 
@@ -94,7 +115,8 @@ def scrapeDailyMotion(link):
 	for source in sources:
 		frames.append('<iframe src="%s" frameborder="0" allowfullscreen="" marginwidth="0" marginheight="0" scrolling="NO" width="520" height="400"></iframe>'%(source))
 	driver.quit()
-	return (frames)
+	list(set(a))
+	return (list(set(frames)))
 
 
 def scrapeSecond():
