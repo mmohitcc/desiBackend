@@ -84,8 +84,8 @@ def scrapeDailyMotion(link):
 	count = 0
 	driver.quit()
 	for l in allLinks:
-		# if(count % 2 == 0):
-		driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+		if(count % 2 == 0):
+			driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 		# print (l)
 		# going to the video page
 		# print("printing l")
@@ -102,8 +102,8 @@ def scrapeDailyMotion(link):
 			if(ifra.get_attribute("src").find("plyr") > 0):
 				sources.append(ifra.get_attribute("src"))
 
-		# if(count % 2 == 0):
-		driver.quit()
+		if(count % 2 == 0):
+			driver.quit()
 		count+=1
 				
 
