@@ -64,9 +64,9 @@ def scrapeDailyMotion(link):
 	for b in btns:
 		a = b.find_elements_by_xpath("//*[contains(text(), 'Dailymotion')]")
 		if(len(a) > 0):
-			# print("should have the one with daily motion")
+			print("should have the one with daily motion")
 			button = a[0].find_element_by_xpath("..")
-			# print (button.get_attribute('innerHTML'))
+			print (button.get_attribute('innerHTML'))
 			pary = button.find_element_by_xpath("following-sibling::p")
 			allvkPrimeLinks = pary.find_elements_by_tag_name("a")
 	# headlines = btns.find_elements_by_xpath("//*[contains(text(), 'Dailymotion')]")[0]
@@ -83,14 +83,13 @@ def scrapeDailyMotion(link):
 	sources = []
 	count = 0
 	driver.quit()
-	driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 	for l in allLinks:
 		# if(count % 2 == 0):
 		driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 		# print (l)
 		# going to the video page
-		# print("printing l")
-		# print(l)
+		print("printing l")
+		print(l)
 		driver.get(l)
 		# frame = driver.find_element_by_xpath("//iframe[contains(@src,'vkprime'])]")
 		# grabbing the iframes on the page
@@ -99,7 +98,7 @@ def scrapeDailyMotion(link):
 		for ifra in ifras:
 			# print("checking frames")
 			# looking for iframes with src containing vk
-			# print(ifra.get_attribute("src"))
+			print(ifra.get_attribute("src"))
 			if(ifra.get_attribute("src").find("plyr") > 0):
 				sources.append(ifra.get_attribute("src"))
 
@@ -111,7 +110,7 @@ def scrapeDailyMotion(link):
 
 	# for source in sources:
 	# 	# print(source)
-	
+	driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 	frames = []
 	for source in sources:
 		frames.append('<iframe src="%s" frameborder="0" allowfullscreen="" marginwidth="0" marginheight="0" scrolling="NO" width="520" height="400"></iframe>'%(source))
