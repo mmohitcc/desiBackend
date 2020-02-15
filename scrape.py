@@ -29,7 +29,9 @@ def scrape(link):
 	for l in allvkPrimeLinks:
 		allLinks.append(l.get_attribute("href"))
 	sources = []
+	driver.quit()
 	for l in allLinks:
+		driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 		# print (l)
 		# going to the video page
 		driver.get(l)
@@ -42,12 +44,13 @@ def scrape(link):
 			# looking for iframes with src containing vk
 			if(ifra.get_attribute("src").find("vk") > 0):
 				sources.append(ifra.get_attribute("src"))
+		driver.quit()
 				
 
 
 	# for source in sources:
 	# 	# print(source)
-	
+	driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 	frames = []
 	for source in sources:
 		frames.append('<iframe src="%s" frameborder="0" allowfullscreen="" marginwidth="0" marginheight="0" scrolling="NO" width="520" height="400"></iframe>'%(source))
@@ -55,20 +58,23 @@ def scrape(link):
 	return (frames)
 
 def scrapeDailyMotion(link):
-	driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+	driver = webdriver.Chrome()
 	# driver.execute_script("window.open('"+link+"', '_blank')")
 	driver.get(link)
 	# time.sleep(5)
 	allvkPrimeLinks = []
-	btns = driver.find_elements_by_class_name("btn_green")
+	# divs = driver.find_element_by_tag_name('div')
+	btns = driver.find_elements_by_xpath("//div[contains(@class, 'buttons')]")
+	print("printing btns length")
+	print(len(btns))
 	for b in btns:
-		a = b.find_elements_by_xpath("//*[contains(text(), 'Dailymotion')]")
-		if(len(a) > 0):
-			print("should have the one with daily motion")
-			button = a[0].find_element_by_xpath("..")
-			print (button.get_attribute('innerHTML'))
-			pary = button.find_element_by_xpath("following-sibling::p")
-			allvkPrimeLinks = pary.find_elements_by_tag_name("a")
+		# a = b.find_elements_by_xpath("//*[contains(text(), 'Dailymotion')]")
+		# if(len(a) > 0):
+		print("should have the one with daily motion")
+			# button = a[0].find_element_by_xpath("..")
+			# print (button.get_attribute('innerHTML'))
+		pary = b.find_element_by_xpath("following-sibling::p")
+		allvkPrimeLinks = pary.find_elements_by_tag_name("a")
 	# headlines = btns.find_elements_by_xpath("//*[contains(text(), 'Dailymotion')]")[0]
 	
 	
@@ -83,10 +89,10 @@ def scrapeDailyMotion(link):
 	sources = []
 	count = 0
 	driver.quit()
-	allLinks = list(set(allLinks))
+	# allLinks = list(set(allLinks))
 	for l in allLinks:
 		# if(count % 2 == 0):
-		driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+		driver = webdriver.Chrome()
 		# print (l)
 		# going to the video page
 		print("printing l")
@@ -111,12 +117,12 @@ def scrapeDailyMotion(link):
 
 	# for source in sources:
 	# 	# print(source)
-	driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+	driver = webdriver.Chrome()
 	frames = []
 	for source in sources:
 		frames.append('<iframe src="%s" frameborder="0" allowfullscreen="" marginwidth="0" marginheight="0" scrolling="NO" width="520" height="400"></iframe>'%(source))
 	driver.quit()
-	list(set(a))
+	# list(set(a))
 	return (list(set(frames)))
 
 
